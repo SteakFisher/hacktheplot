@@ -119,3 +119,11 @@ export const transcriptRelations = relations(transcriptTable, ({ one }) => ({
     references: [assetTable.id],
   }),
 }));
+
+export const otpTable = pgTable("otp", {
+  user_id: uuid("user_id")
+    .primaryKey()
+    .references(() => userTable.id),
+  otp: bigint({ mode: "number" }).unique().notNull(),
+  expiry: timestamp({ withTimezone: true, mode: "string" }).notNull(),
+});
