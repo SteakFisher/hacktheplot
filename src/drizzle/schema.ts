@@ -20,8 +20,13 @@ export const userTable = pgTable("users", {
     .notNull(),
 }).enableRLS();
 
-export const userRelations = relations(userTable, ({ many }) => ({
+export const userRelations = relations(userTable, ({ one, many }) => ({
   submissions: many(submissionTable),
+  otp: one(otpTable, {
+    fields: [userTable.id],
+    references: [otpTable.user_id],
+  }),
+  devices: many(devicesTable),
 }));
 
 export const questionTable = pgTable("questions", {
@@ -126,4 +131,26 @@ export const otpTable = pgTable("otp", {
     .references(() => userTable.id),
   otp: bigint({ mode: "number" }).unique().notNull(),
   expiry: timestamp({ withTimezone: true, mode: "string" }).notNull(),
+}).enableRLS();
+
+export const otpRelations = relations(otpTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [otpTable.user_id],
+    references: [userTable.id],
+  }),
+}));
+
+export const devicesTable = pgTable("devices", {
+  id: bigint({ mode: "number" }).unique().notNull(),
+  user_id: uuid("user_id")
+    .references(() => userTable.id, { onDelete: "cascade" })
+    .notNull(),
+  timestamp: timestamp({ withTimezone: true, mode: "string" }).notNull(),
 });
+
+export const devicesRelations = relations(devicesTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [devicesTable.user_id],
+    references: [userTable.id],
+  }),
+}));

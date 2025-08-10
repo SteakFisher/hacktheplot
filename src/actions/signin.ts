@@ -37,9 +37,6 @@ export async function signIn(email: string, password: string) {
         role: user.role,
       } as Payload;
 
-      const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
-      const alg = "HS256";
-
       const token = await generateJWT(payload);
       (await cookies()).set("access_token", token);
 
