@@ -169,6 +169,7 @@ export default function SidebarDemo({
               <AnimatedTooltip
                 items={showExpandedAvatars ? people : people.slice(0, 2)}
                 size={showExpandedAvatars ? 40 : 20}
+                isExpanded={showExpandedAvatars}
               />
             </div>
           </div>

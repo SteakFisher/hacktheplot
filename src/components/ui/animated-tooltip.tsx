@@ -12,6 +12,8 @@ import {
 export const AnimatedTooltip = ({
   items,
   size = 56,
+  isExpanded = true,
+  collapseBaseDelayMs = 250,
 }: {
   items: {
     id: number;
@@ -21,6 +23,10 @@ export const AnimatedTooltip = ({
   }[];
   /** Avatar size in pixels; adjusts tooltip spacing responsively */
   size?: number;
+  /** Whether the group is expanded; controls stagger direction */
+  isExpanded?: boolean;
+  /** Base delay before collapsed-state avatars animate in (ms) */
+  collapseBaseDelayMs?: number;
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const springConfig = { stiffness: 100, damping: 5 };
@@ -43,7 +49,16 @@ export const AnimatedTooltip = ({
           initial={{ opacity: 0, scale: 0.9, x: -8 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           exit={{ opacity: 0, scale: 0.9, x: -8 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            // open: left-to-right slight cascade with extra hold on the final item
+            // close: right-to-left reverse cascade
+            delay: isExpanded
+              ? idx * 0.02 + (idx === items.length - 1 ? 0.08 : 0)
+              : (collapseBaseDelayMs / 1000) + (items.length - 1 - idx) * 0.02,
+          }}
           className="-mr-4  relative group"
           key={item.name}
           onMouseEnter={() => setHoveredIndex(item.id)}
