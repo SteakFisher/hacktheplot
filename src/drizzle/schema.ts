@@ -6,6 +6,7 @@ import {
   timestamp,
   unique,
   uuid,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -14,7 +15,10 @@ export const userTable = pgTable("users", {
   username: text("username").notNull(),
   email: text("email").unique().notNull(),
   password: text("password").notNull(),
-  progress: bigint("progress", { mode: "number" }).default(0).notNull(),
+  progress: bigint("progress", { mode: "number" })
+    .default(0)
+    .references(() => questionTable.no)
+    .notNull(),
   role: text("role", { enum: ["participant", "admin"] })
     .default("participant")
     .notNull(),
@@ -27,6 +31,11 @@ export const userRelations = relations(userTable, ({ one, many }) => ({
     references: [otpTable.user_id],
   }),
   devices: many(devicesTable),
+  scans: many(scanTable),
+  question: one(questionTable, {
+    fields: [userTable.progress],
+    references: [questionTable.no],
+  }),
 }));
 
 export const questionTable = pgTable("questions", {
@@ -41,6 +50,9 @@ export const questionTable = pgTable("questions", {
 export const questionRelations = relations(questionTable, ({ many }) => ({
   submissions: many(submissionTable),
   assets: many(assetTable),
+  pie: many(pieTable),
+  scans: many(scanTable),
+  questions: many(userTable),
 }));
 
 export const submissionTable = pgTable(
@@ -129,7 +141,7 @@ export const otpTable = pgTable("otp", {
   user_id: uuid("user_id")
     .primaryKey()
     .references(() => userTable.id),
-  otp: bigint({ mode: "number" }).unique().notNull(),
+  otp: varchar("otp", { length: 6 }).unique().notNull(),
   expiry: timestamp({ withTimezone: true, mode: "string" }).notNull(),
 }).enableRLS();
 
@@ -141,7 +153,7 @@ export const otpRelations = relations(otpTable, ({ one }) => ({
 }));
 
 export const devicesTable = pgTable("devices", {
-  id: bigint({ mode: "number" }).unique().notNull(),
+  id: varchar("id", { length: 8 }).notNull(),
   user_id: uuid("user_id")
     .references(() => userTable.id, { onDelete: "cascade" })
     .notNull(),
@@ -152,5 +164,48 @@ export const devicesRelations = relations(devicesTable, ({ one }) => ({
   user: one(userTable, {
     fields: [devicesTable.user_id],
     references: [userTable.id],
+  }),
+}));
+
+export const pieTable = pgTable("pie", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  pie_no: bigint("pie_no", { mode: "number" }).notNull(),
+  hint: text("hint").notNull(),
+  range: bigint("range", { mode: "number" }).notNull(),
+  question_id: uuid("question_id")
+    .references(() => questionTable.id)
+    .notNull(),
+});
+
+export const pieRelations = relations(pieTable, ({ one }) => ({
+  question: one(questionTable, {
+    fields: [pieTable.question_id],
+    references: [questionTable.id],
+  }),
+}));
+
+export const scanTable = pgTable("scan", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  user_id: uuid("user_id")
+    .references(() => userTable.id, { onDelete: "cascade" })
+    .notNull(),
+  question_id: uuid("question_id")
+    .references(() => questionTable.id)
+    .notNull(),
+  hint: text("hint").notNull(),
+  status: text("status", {
+    enum: ["default", "requested", "scanned"],
+  }).notNull(),
+  scan_time: timestamp({ withTimezone: true, mode: "string" }).notNull(),
+});
+
+export const scanRelations = relations(scanTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [scanTable.user_id],
+    references: [userTable.id],
+  }),
+  question: one(questionTable, {
+    fields: [scanTable.question_id],
+    references: [questionTable.id],
   }),
 }));
