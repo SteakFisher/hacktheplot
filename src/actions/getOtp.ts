@@ -34,12 +34,14 @@ export async function getOtp() {
     }
 
     // Generate new 6-digit OTP
-    let newOtp: number;
+    let newOtp: string;
     let isUnique = false;
 
     // Ensure OTP is unique
     while (!isUnique) {
-      newOtp = Math.floor(100000 + Math.random() * 900000);
+      newOtp = Math.floor(100000 + Math.random() * 900000)
+        .toString()
+        .padStart(6, "0");
 
       const existingOtpWithSameCode = await db.query.otpTable.findFirst({
         where: eq(otpTable.otp, newOtp),
@@ -71,7 +73,7 @@ export async function getOtp() {
 
     return {
       success: true,
-      otp: newOtp!.toString().padStart(6, "0"),
+      otp: newOtp!,
       expiryTime: expiryTime.toISOString(),
       remainingTime: 120, // 2 minutes in seconds
     };
