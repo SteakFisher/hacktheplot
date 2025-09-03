@@ -19,7 +19,7 @@ const QuestionCard = (props: { question: Question; progress: number }) => {
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-white flex items-center justify-between">
           {question.title}
-          {question.no < progress && <CheckCircle className="text-[#8b5cf6]" />}
+          {question.no < progress && <CheckCircle className="text-halloween-orange" />}
           {question.no > progress && <Lock className="text-gray-500" />}
         </CardTitle>
         <CardDescription className="text-gray-400">
@@ -27,7 +27,7 @@ const QuestionCard = (props: { question: Question; progress: number }) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {question.no < progress && <p className="text-[#8b5cf6]">Solved!</p>}
+        {question.no < progress && <p className="text-halloween-orange">Solved!</p>}
         {question.no == progress && (
           <Link href={`/questions/${question.no}`} className="bg-none">
             <HoverBorderGradient

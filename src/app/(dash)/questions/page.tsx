@@ -26,7 +26,7 @@ export default async function Questions() {
   return (
     <BackgroundBeamsWithCollision>
       <div className="min-h-screen h-screen overflow-auto w-screen text-gray-200 p-8">
-        <div className="text-8xl relative font-extrabold mb-8 text-center font-bold text-white text-transparent bg-clip-text bg-no-repeat bg-gradient-to-r py-4 from-purple-500 via-violet-500 to-pink-500 [text-shadow:0_0_rgba(0,0,0,0.1)]">
+        <div className="text-8xl relative font-extrabold mb-8 text-center font-bold text-white text-transparent bg-clip-text bg-no-repeat bg-gradient-to-r py-4 [text-shadow:0_0_rgba(0,0,0,0.1)]" style={{backgroundImage: 'linear-gradient(to right, var(--halloween-orange), var(--halloween-red), var(--halloween-yellow))'}}>
           <h1 className="opacity-[.10] text-center overflow-hidden whitespace-nowrap pb-4">
             13 Reasons Why
           </h1>

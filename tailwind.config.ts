@@ -55,6 +55,19 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // Halloween theme colors using CSS variables
+        halloween: {
+          orange: "var(--halloween-orange)",
+          "orange-dark": "var(--halloween-orange-dark)",
+          "orange-light": "var(--halloween-orange-light)",
+          black: "var(--halloween-black)",
+          "black-light": "var(--halloween-black-light)",
+          pumpkin: "var(--halloween-pumpkin)",
+          "pumpkin-dark": "var(--halloween-pumpkin-dark)",
+          red: "var(--halloween-red)",
+          "red-dark": "var(--halloween-red-dark)",
+          yellow: "var(--halloween-yellow)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

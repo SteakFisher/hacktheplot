@@ -11,16 +11,16 @@ import {
 } from "recharts";
 
 const colors = [
-  "#FF6B6B",
-  "#4ECDC4",
-  "#45B7D1",
-  "#FFA07A",
-  "#98D8C8",
-  "#F06292",
-  "#AED581",
-  "#7986CB",
-  "#4DB6AC",
-  "#FFD54F",
+  "var(--halloween-orange)",
+  "var(--halloween-orange-light)",
+  "var(--halloween-orange-dark)",
+  "var(--halloween-pumpkin-dark)",
+  "var(--halloween-pumpkin)",
+  "#FFA500",
+  "#FFB347",
+  "#FF8C69",
+  "#FF7F50",
+  "#FF6347",
 ];
 
 const progression = (props: { chartData: any[] }) => {

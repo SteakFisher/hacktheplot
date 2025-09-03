@@ -152,12 +152,13 @@ export default function RasputinClient({
             {/* Progress Bar */}
             <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
               <div
-                className={`h-full transition-all duration-1000 rounded-full ${
-                  timeRemaining <= 30
-                    ? "bg-gradient-to-r from-red-500 to-pink-500"
-                    : "bg-gradient-to-r from-blue-500 to-purple-500"
-                }`}
-                style={{ width: `${100 - getProgressPercentage()}%` }}
+                className="h-full transition-all duration-1000 rounded-full"
+                style={{
+                  background: timeRemaining <= 30 
+                    ? 'linear-gradient(to right, var(--halloween-red), #FF69B4)' 
+                    : 'linear-gradient(to right, var(--halloween-orange), var(--halloween-red))',
+                  width: `${100 - getProgressPercentage()}%`
+                }}
               />
             </div>
 
