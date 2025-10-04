@@ -7,8 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Lock, CheckCircle } from "lucide-react";
 import { Question } from "@/types/General";
-import Link from "next/link";
-import { HoverBorderGradient } from "./ui/hover-border-gradient";
+import LinkPrefetch from "./LinkPrefetch";
 
 const QuestionCard = (props: { question: Question; progress: number }) => {
   const question: Question = props.question;
@@ -29,17 +28,7 @@ const QuestionCard = (props: { question: Question; progress: number }) => {
       <CardContent>
         {question.no < progress && <p className="text-halloween-orange">Solved!</p>}
         {question.no == progress && (
-          <Link href={`/questions/${question.no}`} className="bg-none">
-            <HoverBorderGradient
-              containerClassName="rounded-full"
-              as="button"
-              className="bg-black text-black dark:text-white flex items-center space-x-4 px-8 sm:w-full"
-            >
-              <span className="w-full bg-black hover:bg-black text-white">
-                Attempt
-              </span>
-            </HoverBorderGradient>
-          </Link>
+          <LinkPrefetch questionNumber={question.no} />
         )}
         {question.no > progress && (
           <p className="text-gray-500">Solve previous questions to unlock</p>
