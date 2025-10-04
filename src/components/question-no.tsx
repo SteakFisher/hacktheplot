@@ -59,7 +59,7 @@ export const QuestionPanel = (props: {
           </div>
         )}
         <div className="mt-1 text-sm text-zinc-400">
-          Points: <span className="text-[#8b5cf6]">{props.question.score}</span>
+          Points: <span className="text-[var(--halloween-orange)]">{props.question.score}</span>
         </div>
       </div>
       <ScrollArea className="flex-1 p-4 overflow-auto">

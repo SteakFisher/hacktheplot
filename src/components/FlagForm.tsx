@@ -36,7 +36,7 @@ export default function FlagForm(props: { type: boolean; question: Question }) {
         containerClassName="rounded-full"
         as="button"
         className="bg-black text-black dark:text-white flex items-center space-x-4 px-8 sm:w-full"
-        typeof="submit"
+        type="submit"
       >
         <span className="w-full bg-black hover:bg-black text-white">
           Submit

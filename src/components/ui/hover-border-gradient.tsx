@@ -6,23 +6,27 @@ import { cn } from "@/lib/utils";
 
 type Direction = "TOP" | "LEFT" | "BOTTOM" | "RIGHT";
 
-export function HoverBorderGradient({
+type HoverBorderGradientProps<
+  T extends React.ElementType = "button",
+> = {
+  as?: T;
+  containerClassName?: string;
+  className?: string;
+  duration?: number;
+  clockwise?: boolean;
+} & Omit<React.ComponentPropsWithoutRef<T>, "as" | "children" | "className">;
+
+export function HoverBorderGradient<
+  T extends React.ElementType = "button",
+>({
   children,
   containerClassName,
   className,
-  as: Tag = "button",
+  as: Tag = "button" as T,
   duration = 1,
   clockwise = true,
   ...props
-}: React.PropsWithChildren<
-  {
-    as?: React.ElementType;
-    containerClassName?: string;
-    className?: string;
-    duration?: number;
-    clockwise?: boolean;
-  } & React.HTMLAttributes<HTMLElement>
->) {
+}: React.PropsWithChildren<HoverBorderGradientProps<T>>) {
   const [hovered, setHovered] = useState<boolean>(false);
   const [direction, setDirection] = useState<Direction>("TOP");
 
@@ -45,7 +49,7 @@ export function HoverBorderGradient({
   };
 
   const highlight =
-    "radial-gradient(75% 181.15942028985506% at 50% 50%, #3275F8 0%, rgba(255, 255, 255, 0) 100%)";
+    "radial-gradient(75% 181.15942028985506% at 50% 50%, #FF6B35 0%, rgba(255, 255, 255, 0) 100%)";
 
   useEffect(() => {
     if (!hovered) {
@@ -55,9 +59,11 @@ export function HoverBorderGradient({
       return () => clearInterval(interval);
     }
   }, [hovered]);
+  const Component = Tag as React.ElementType;
+
   return (
-    <Tag
-      onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {
+    <Component
+      onMouseEnter={(event: React.MouseEvent<any>) => {
         setHovered(true);
       }}
       onMouseLeave={() => setHovered(false)}
@@ -65,7 +71,7 @@ export function HoverBorderGradient({
         "relative flex rounded-full border content-center bg-black/20 hover:bg-black/10 transition duration-500 dark:bg-white/ items-center flex-col flex-nowrap gap-10 h-min justify-center overflow-visible p-px decoration-clone w-fit",
         containerClassName,
       )}
-      {...props}
+      {...(props as any)}
     >
       <div
         className={cn(
@@ -94,6 +100,6 @@ export function HoverBorderGradient({
         transition={{ ease: "linear", duration: duration ?? 1 }}
       />
       <div className="bg-black absolute z-1 flex-none inset-[2px] rounded-[100px]" />
-    </Tag>
+    </Component>
   );
 }
