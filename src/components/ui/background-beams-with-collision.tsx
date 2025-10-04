@@ -75,14 +75,17 @@ export const BackgroundBeamsWithCollision = ({
         className,
       )}
     >
-      {beams.map((beam) => (
-        <CollisionMechanism
-          key={beam.initialX + "beam-idx"}
-          beamOptions={beam}
-          containerRef={containerRef}
-          parentRef={parentRef}
-        />
-      ))}
+      {beams.map((beam) => {
+        if (!containerRef.current || !parentRef.current) return null;
+        return (
+          <CollisionMechanism
+            key={beam.initialX + "beam-idx"}
+            beamOptions={beam}
+            containerRef={containerRef}
+            parentRef={parentRef}
+          />
+        )
+      })}
 
       {children}
       <div
@@ -100,8 +103,9 @@ export const BackgroundBeamsWithCollision = ({
 const CollisionMechanism = React.forwardRef<
   HTMLDivElement,
   {
-    containerRef: React.RefObject<HTMLDivElement>;
-    parentRef: React.RefObject<HTMLDivElement>;
+    // accept either a readonly RefObject or the MutableRefObject returned by useRef
+    containerRef: React.RefObject<HTMLDivElement> | React.MutableRefObject<HTMLDivElement | null>;
+    parentRef: React.RefObject<HTMLDivElement> | React.MutableRefObject<HTMLDivElement | null>;
     beamOptions?: {
       initialX?: number;
       translateX?: number;
