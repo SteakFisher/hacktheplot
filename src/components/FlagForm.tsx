@@ -6,6 +6,49 @@ import { flagSubmit } from "@/actions/flagSubmit";
 import { HoverBorderGradient } from "./ui/hover-border-gradient";
 import { Question } from "@/types/General";
 import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
+
+function LoadingDots() {
+  return (
+    <span className="inline-flex gap-1">
+      <span className="animate-bounce [animation-delay:-0.3s]">.</span>
+      <span className="animate-bounce [animation-delay:-0.15s]">.</span>
+      <span className="animate-bounce">.</span>
+    </span>
+  );
+}
+
+function FlagInput() {
+  const { pending } = useFormStatus();
+  
+  return (
+    <Input
+      type="text"
+      placeholder="flag{...}"
+      className="flex-1 !bg-black b h-[2.7rem] order-zinc-700 text-white rounded-full placeholder-zinc-500"
+      name="flag"
+      disabled={pending}
+    />
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  
+  return (
+    <HoverBorderGradient
+      containerClassName="rounded-full"
+      as="button"
+      className="bg-black text-black dark:text-white flex items-center space-x-4 px-8 sm:w-full"
+      type="submit"
+      disabled={pending}
+    >
+      <span className="w-full bg-black hover:bg-black text-white">
+        {pending ? <LoadingDots /> : "Submit"}
+      </span>
+    </HoverBorderGradient>
+  );
+}
 
 export default function FlagForm(props: { type: boolean; question: Question }) {
   const router = useRouter();
@@ -26,22 +69,8 @@ export default function FlagForm(props: { type: boolean; question: Question }) {
         }
       }}
     >
-      <Input
-        type="text"
-        placeholder="flag{...}"
-        className="flex-1 !bg-black b h-[2.7rem] order-zinc-700 text-white rounded-full placeholder-zinc-500"
-        name="flag"
-      />
-      <HoverBorderGradient
-        containerClassName="rounded-full"
-        as="button"
-        className="bg-black text-black dark:text-white flex items-center space-x-4 px-8 sm:w-full"
-        type="submit"
-      >
-        <span className="w-full bg-black hover:bg-black text-white">
-          Submit
-        </span>
-      </HoverBorderGradient>
+      <FlagInput />
+      <SubmitButton />
     </form>
   );
 }
